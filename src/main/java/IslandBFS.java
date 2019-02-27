@@ -2,56 +2,62 @@ import java.util.*;
 
 public class IslandBFS {
 
-    int[][] multi;
-    Queue<Point> queue = new LinkedList<Point>();
-    Set<Point> lands = new HashSet<>();
+    int[][] grid;
+    Set<Point> visitedLands = new HashSet<>();
     int numOfIslands = 0;
+    int rowSize;
+    int colSize;
 
 
-    public IslandBFS(int[][] multi) {
-        this.multi = multi;
+    public IslandBFS(int[][] grid) {
+        this.grid = grid;
+        this.rowSize = grid.length;
+        this.colSize = grid[0].length;
     }
 
     public int scanMap() {
-        Point point = new Point(0, 0);
-        for (int i = 0; i < multi.length; i++) {
-            for (int j = 0; j < multi[0].length; j++) {
-                point.r = i;
-                point.c = j;
-                if (multi[i][j] == 1 && !lands.contains(point)) {
-                    lands.add(point);
-                    queue.add(point);
-                    while (true) {
-                        int r = queue.peek().r;
-                        int c = queue.peek().c;
-                        addAdjacentLands(r, c, queue, lands);
-                        queue.remove();
-                        if (queue.isEmpty()) {
-                            numOfIslands += 1;
-                            break;
-                        }
-                    }
-                }
+        Point currentPoint = new Point(0, 0);
+        for (int i = 0; i < rowSize; i++) {
+            for (int j = 0; j < colSize; j++) {
+                currentPoint.r = i;
+                currentPoint.c = j;
+                doBfs(i,j,currentPoint,visitedLands,grid);
             }
         }
         return numOfIslands;
     }
 
-    boolean isInBounds(Point point, int[][] multi) {
-        if (point.r >= 0 && point.c >= 0 && point.r < multi.length && point.c < multi[0].length)
-            return true;
-        else return false;
+    boolean isInBounds(Point point) {
+        return point.r >= 0 && point.c >= 0 && point.r < rowSize && point.c < colSize;
     }
 
-    public void addAdjacentLands(int r, int c, Queue<Point> queue, Set<Point> lands) {
+    public void addAdjacentLands(int r, int c, Queue<Point> queue, Set<Point> visitedLands) {
         for (Direction direction : Direction.values()) {
             Point newPoint = new Point(r, c);
             newPoint.makeMove(direction);
-            if (isInBounds(newPoint, multi) && multi[newPoint.r][newPoint.c] == 1 && !lands.contains(newPoint)
-            ) {
+            if (canMove(grid, newPoint)) {
                 queue.add(newPoint);
-                lands.add(newPoint);
+                visitedLands.add(newPoint);
             } else continue;
+        }
+    }
+
+    boolean canMove (int[][] grid, Point newPoint) {
+        return isInBounds(newPoint) && grid[newPoint.r][newPoint.c] == 1 && !visitedLands.contains(newPoint);
+    }
+
+    public void doBfs (int i, int j,Point currentPoint,Set<Point> visitedLands, int[][] grid) {
+        if (grid[i][j] == 1 && !visitedLands.contains(currentPoint)) {
+            Queue<Point> queue = new LinkedList<Point>();
+            visitedLands.add(currentPoint);
+            queue.add(currentPoint);
+            while(!queue.isEmpty()) {
+                int r = queue.peek().r;
+                int c = queue.peek().c;
+                addAdjacentLands(r, c, queue, visitedLands);
+                queue.remove();
+            }
+            numOfIslands += 1;
         }
     }
 }
