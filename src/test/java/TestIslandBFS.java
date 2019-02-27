@@ -8,15 +8,15 @@ public class TestIslandBFS {
     public void testIslandDFS () {
 
         IslandBFS islandBFS = new IslandBFS(multi);
-        assertEquals(2, islandBFS.scanMap() );
+        assertEquals(3, islandBFS.scanMap() );
 
     }
 
     int [][] multi = new int[][]{
-            { 1, 0, 1, 0, 1, 1, 1, 1, 1, 1 },
-            { 1, 0, 1, 0, 0, 1, 1, 1, 1, 1 },
-            { 1, 0, 1, 1, 0, 1, 0, 1, 1, 1 },
-            { 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 },
-            { 1, 0, 1, 1, 0, 1, 1, 1, 1, 1 }
+            { 1, 0, 1, 0, 1, 1, 0, 1, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 0, 1, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 0, 1, 1, 1 },
+            { 1, 1, 1, 0, 0, 1, 0, 1, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 0, 1, 1, 1 }
     };
 }
